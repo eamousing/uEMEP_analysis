@@ -31,3 +31,24 @@ def read_observations_airnow(dir, col_names=col_names):
     all_data = pd.concat(dataframes, ignore_index=True)
 
     return all_data
+
+def clean_observations_airnow(df):
+    """
+    Cleans the observations data by removing NaN values and negative values.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing the observations data.
+
+    Returns:
+        pandas.DataFrame: The cleaned DataFrame with NaN and negative values removed.
+    """
+    df = df.copy()
+
+    # Remove NaN values
+    df["Conc"] = pd.to_numeric(df["Conc"], errors="coerce")
+    df = df.dropna(subset=["Conc"])
+
+    # Remove negative values
+    df = df[df["Conc"] > 0]
+
+    return df
